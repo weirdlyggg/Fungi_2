@@ -4,6 +4,8 @@ using BackendFungi.YuraFolder.Models;
 
 namespace BackendFungi.YuraFolder.Supports;
 
+// TODO Нужно убрать этот сервис и перенести его функционал в сервис для грибов
+
 public static class MushroomsFilter
 {
     public static Mushroom[] Filter(MushroomsModel model, FungiDbContext dbContext)
@@ -40,9 +42,9 @@ public static class MushroomsFilter
             mushrooms = mushrooms.Where(p => p.StemType == model.StemType).ToArray();
         }
 
-        if (model.SteamColor is not null)
+        if (model.StemColor is not null)
         {
-            mushrooms = mushrooms.Where(p => p.StemColor == model.SteamColor).ToArray();
+            mushrooms = mushrooms.Where(p => p.StemColor == model.StemColor).ToArray();
         }
 
         return mushrooms;

@@ -15,8 +15,7 @@ public class Doppelganger
     public Guid MushroomId { get; }
     public string DoppelgangerName { get; }
 
-    public static (Doppelganger Doppelganger, string Error)
-        Create(Guid id, Guid mushroomId, string doppelgangerName)
+    private static string DoppelgangerBasicChecks(string doppelgangerName)
     {
         var error = string.Empty;
 
@@ -24,6 +23,14 @@ public class Doppelganger
         {
             error = $"Doppelganger name can't be longer than {MaxDoppelgangerNameLength} characters or empty";
         }
+        
+        return error;
+    }
+
+    public static (Doppelganger Doppelganger, string Error)
+        Create(Guid id, Guid mushroomId, string doppelgangerName)
+    {
+        var error = DoppelgangerBasicChecks(doppelgangerName);
 
         var article = new Doppelganger(id, mushroomId, doppelgangerName);
 

@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BackendFungi.Services;
 
+// TODO перенести этот сервис в сервис для статей
 public class FilterArticleService : IFilterArticleService
 {
     private readonly FungiDbContext _context;

@@ -8,7 +8,6 @@ public interface IArticlesRepository
     Task<List<Article>> GetAllArticles();
     Task<Guid> GetArticleId(string articleTitle);
     Task<Article> GetArticle(Guid articleId);
-    Task<Guid> UpdateArticle(Guid articleId, string newArticleTitle, DateTime? newPublishDate,
-        List<Paragraph> newParagraphs);
-    Task<Guid> DeleteArticle(Guid id);
+    Task<Guid> UpdateArticle(Guid articleId, Article newArticleModel);
+    Task<Guid> DeleteArticle(Guid articleId);
 }

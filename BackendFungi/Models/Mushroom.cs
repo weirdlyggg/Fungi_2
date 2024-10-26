@@ -1,3 +1,5 @@
+using BackendFungi.Contracts;
+
 namespace BackendFungi.Models;
 
 public class Mushroom
@@ -6,10 +8,10 @@ public class Mushroom
     public const int MaxSynonymousNameLength = 100;
     public const int MaxEatableLength = 15;
     public const int MaxStemTypeLength = 30;
-    public const int MaxSteamColorLength = 100;
+    public const int MaxStemColorLength = 100;
 
     private Mushroom(Guid id, string name, string? synonymousName, bool redBook, string eatable,
-        bool hasStem, int? stemSizeFrom, int? stemSizeTo, string? stemType, string? steamColor,
+        bool hasStem, int? stemSizeFrom, int? stemSizeTo, string? stemType, string? stemColor,
         string? description, List<Doppelganger> doppelgangers)
     {
         Id = id;
@@ -21,7 +23,7 @@ public class Mushroom
         StemSizeFrom = stemSizeFrom;
         StemSizeTo = stemSizeTo;
         StemType = stemType;
-        SteamColor = steamColor;
+        StemColor = stemColor;
         Description = description;
         Doppelgangers = doppelgangers;
     }
@@ -35,14 +37,12 @@ public class Mushroom
     public int? StemSizeFrom { get; }
     public int? StemSizeTo { get; }
     public string? StemType { get; }
-    public string? SteamColor { get; }
+    public string? StemColor { get; }
     public string? Description { get; }
     public List<Doppelganger> Doppelgangers { get; }
 
-    public static (Mushroom Mushroom, string Error)
-        Create(Guid id, string name, string? synonymousName, bool redBook, string eatable,
-            bool hasStem, int? stemSizeFrom, int? stemSizeTo, string? stemType, string? steamColor,
-            string? description, List<Doppelganger> doppelgangers)
+    private static string MushroomBasicChecks(string name, string? synonymousName, string eatable, bool hasStem,
+        int? stemSizeFrom, int? stemSizeTo, string? stemType, string? stemColor)
     {
         var error = string.Empty;
 
@@ -58,10 +58,10 @@ public class Mushroom
         {
             error = $"Eatable can't be longer than {MaxEatableLength} characters";
         }
-        else if (hasStem && (stemSizeFrom is not null ||
-                             stemSizeTo is not null ||
-                             stemType is not null ||
-                             steamColor is not null))
+        else if (!hasStem && (stemSizeFrom is not null ||
+                              stemSizeTo is not null ||
+                              stemType is not null ||
+                              stemColor is not null))
         {
             error = "If the mushroom doesn't have a stem information about its stem isn't needed";
         }
@@ -78,13 +78,54 @@ public class Mushroom
         {
             error = $"Stem type can't be longer than {MaxStemTypeLength} characters";
         }
-        else if (steamColor is not null && steamColor.Length > MaxSteamColorLength)
+        else if (stemColor is not null && stemColor.Length > MaxStemColorLength)
         {
-            error = $"Stem color can't be longer than {MaxSteamColorLength} characters";
+            error = $"Stem color can't be longer than {MaxStemColorLength} characters";
         }
 
-        var mushroom = new Mushroom(id, name, synonymousName, redBook, eatable,
-            hasStem, stemSizeFrom, stemSizeTo, stemType, steamColor, description, doppelgangers);
+        return error;
+    }
+
+    public static (Mushroom Mushroom, string Error)
+        Create(Guid id, string name, string? synonymousName, bool redBook, string eatable,
+            bool hasStem, int? stemSizeFrom, int? stemSizeTo, string? stemType, string? stemColor,
+            string? description, List<DoppelgangerDto> doppelgangers)
+    {
+        var error = MushroomBasicChecks(name, synonymousName, eatable, hasStem, stemSizeFrom, stemSizeTo, 
+            stemType, stemColor);
+
+        var doppelgangerList = new List<Doppelganger>();
+        foreach (var x in doppelgangers)
+        {
+            var (d, e) = Doppelganger.Create(Guid.NewGuid(), id, x.DoppelgangerName);
+
+            if (!string.IsNullOrEmpty(e))
+            {
+                if (string.IsNullOrEmpty(error))
+                {
+                    error = $"One of the paragraphs caused an error \"{e}\"";
+                }
+            }
+
+            doppelgangerList.Add(d);
+        }
+
+        var mushroom = new Mushroom(id, name, synonymousName, redBook, eatable, hasStem, stemSizeFrom, stemSizeTo,
+            stemType, stemColor, description, doppelgangerList);
+
+        return (mushroom, error);
+    }
+    
+    public static (Mushroom Mushroom, string Error)
+        Create(Guid id, string name, string? synonymousName, bool redBook, string eatable,
+            bool hasStem, int? stemSizeFrom, int? stemSizeTo, string? stemType, string? stemColor,
+            string? description, List<Doppelganger> doppelgangers)
+    {
+        var error = MushroomBasicChecks(name, synonymousName, eatable, hasStem, stemSizeFrom, stemSizeTo, 
+            stemType, stemColor);
+
+        var mushroom = new Mushroom(id, name, synonymousName, redBook, eatable, hasStem, stemSizeFrom, stemSizeTo,
+            stemType, stemColor, description, doppelgangers);
 
         return (mushroom, error);
     }

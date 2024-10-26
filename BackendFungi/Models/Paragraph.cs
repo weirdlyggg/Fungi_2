@@ -14,9 +14,8 @@ public class Paragraph
     public Guid ArticleId { get; }
     public string? ParagraphText { get; }
     public int SerialNumber { get; }
-    
-    public static (Paragraph Paragraph, string Error)
-        Create(Guid id, Guid articleId, string? paragraphText, int serialNumber)
+
+    private static string ParagraphBasicChecks(int serialNumber)
     {
         var error = string.Empty;
 
@@ -24,6 +23,14 @@ public class Paragraph
         {
             error = "Serial number can't be less than 0";
         }
+        
+        return error;
+    }
+    
+    public static (Paragraph Paragraph, string Error)
+        Create(Guid id, Guid articleId, string? paragraphText, int serialNumber)
+    {
+        var error = ParagraphBasicChecks(serialNumber);
         
         var paragraph = new Paragraph(id, articleId, paragraphText, serialNumber);
         

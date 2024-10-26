@@ -1,3 +1,7 @@
 ﻿namespace BackendFungi.Contracts;
 
-public record ArticleDto(string Title, DateTime? PublishDate, List<ParagraphDto> Paragraphs);
+public record ArticleDto(
+    string Title,
+    DateTime? PublishDate,
+    List<ParagraphDto> Paragraphs
+);

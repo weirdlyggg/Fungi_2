@@ -19,9 +19,14 @@ public class Article
     public DateTime? PublishDate { get; }
     public List<Paragraph> Paragraphs { get; }
 
-    public static (Article Article, string Error)
-        Create(Guid id, string title, DateTime? publishDate, List<ParagraphDto> paragraphs)
+    private static string ArticleBasicChecks(string title, DateTime? publishDate, 
+        List<ParagraphDto>? paragraphsDto = null, List<Paragraph>? paragraphs = null)
     {
+        if (paragraphsDto is null && paragraphs is null)
+        {
+            throw new ArgumentException("At least one type of paragraph list is required");
+        }
+        
         var error = string.Empty;
 
         if (string.IsNullOrEmpty(title) || title.Length > MaxTitleLength)
@@ -32,10 +37,19 @@ public class Article
         {
             error = "Publish date can't be from the future";
         }
-        else if (paragraphs.Count == 0)
+        else if ((paragraphsDto is not null && paragraphsDto.Count == 0) ||
+                 (paragraphs is not null && paragraphs.Count == 0))
         {
             error = "The article must contain paragraphs";
         }
+
+        return error;
+    }
+
+    public static (Article Article, string Error)
+        Create(Guid id, string title, DateTime? publishDate, List<ParagraphDto> paragraphs)
+    {
+        var error = ArticleBasicChecks(title, publishDate, paragraphsDto: paragraphs);
         
         var universalPublishDate = publishDate?.ToUniversalTime() ?? DateTime.Now.ToUniversalTime();
         
@@ -63,20 +77,7 @@ public class Article
     public static (Article Article, string Error)
         Create(Guid id, string title, DateTime? publishDate, List<Paragraph> paragraphs)
     {
-        var error = string.Empty;
-
-        if (string.IsNullOrEmpty(title) || title.Length > MaxTitleLength)
-        {
-            error = $"Title can't be longer than {MaxTitleLength} characters or empty";
-        }
-        else if (publishDate > DateTime.Now)
-        {
-            error = "Publish date can't be from the future";
-        }
-        else if (paragraphs.Count == 0)
-        {
-            error = "The article must contain paragraphs";
-        }
+        var error = ArticleBasicChecks(title, publishDate, paragraphs: paragraphs);
         
         var universalPublishDate = publishDate?.ToUniversalTime() ?? DateTime.Now.ToUniversalTime();
 

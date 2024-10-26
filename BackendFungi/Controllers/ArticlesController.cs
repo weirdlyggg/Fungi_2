@@ -1,33 +1,29 @@
 using BackendFungi.Abstractions;
 using BackendFungi.Contracts;
-using BackendFungi.Database.Context;
 using BackendFungi.Models;
-using BackendFungi.YuraFolder.Models;
-using BackendFungi.YuraFolder.Supports;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BackendFungi.Controllers;
 
 [ApiController]
 [Route("/[action]")]
-public class SiteController : ControllerBase
+public class ArticlesController : ControllerBase
 {
-    // Database contexts
-    private readonly FungiDbContext _dbContext;
-
     // Services
-    private readonly IArticleService _articleService;
-    private readonly IFilterArticleService _filterArticleService;
+    private readonly IFilterArticleService
+        _filterArticleService; // TODO убрать сервис фильтрации, интегрировав его в сервис статей
 
-    public SiteController(
-        FungiDbContext dbContext,
-        IFilterArticleService filterArticleService,
-        IArticleService articleService)
+    private readonly IArticlesService _articlesService;
+
+    public ArticlesController(
+        IFilterArticleService filterArticleService, // TODO см. туду на строке 14 этого файла
+        IArticlesService articlesService)
     {
-        _dbContext = dbContext;
-        _filterArticleService = filterArticleService;
-        _articleService = articleService;
+        _filterArticleService = filterArticleService; // TODO см. туду на строке 14 этого файла
+        _articlesService = articlesService;
     }
+
+    /* Query set for articles */
 
     // Getting an article by title
     [HttpGet("{articleTitle=}")]
@@ -38,7 +34,7 @@ public class SiteController : ControllerBase
 
         try
         {
-            var article = await _articleService.GetArticleAsync(articleTitle, cancellationToken);
+            var article = await _articlesService.GetArticleAsync(articleTitle, cancellationToken);
 
             var paragraphs = article.Paragraphs
                 .Select(p => new ParagraphDto(p.ParagraphText))
@@ -63,7 +59,7 @@ public class SiteController : ControllerBase
     {
         try
         {
-            var articles = await _articleService.GetAllArticlesAsync(cancellationToken);
+            var articles = await _articlesService.GetAllArticlesAsync(cancellationToken);
 
             var response = new List<ArticleDto>();
 
@@ -89,8 +85,8 @@ public class SiteController : ControllerBase
 
     // Getting filtered articles
     [HttpGet]
-    public async Task<IActionResult> GetFilterArticles([FromQuery] GetFilterArticleRequest request,
-        CancellationToken cancellationToken)
+    public async Task<IActionResult> GetFilteredArticles([FromQuery] GetFilterArticleRequest request,
+        CancellationToken cancellationToken) // TODO Исправить метод фильтрации статей под единый сервис статей 
     {
         try
         {
@@ -106,7 +102,7 @@ public class SiteController : ControllerBase
 
     // Creating a new article based on the received data
     [HttpPost]
-    public async Task<IActionResult> CreateArticle([FromBody] ArticleDto request, 
+    public async Task<IActionResult> CreateArticle([FromBody] ArticleDto request,
         CancellationToken cancellationToken)
     {
         try
@@ -122,7 +118,7 @@ public class SiteController : ControllerBase
                 return BadRequest(error);
             }
 
-            var createdArticleId = await _articleService
+            var createdArticleId = await _articlesService
                 .CreateArticleAsync(article, cancellationToken);
 
             return Ok(createdArticleId);
@@ -139,12 +135,12 @@ public class SiteController : ControllerBase
         [FromBody] ArticleDto newArticle, CancellationToken cancellationToken)
     {
         if (string.IsNullOrEmpty(articleTitle))
-            return BadRequest("\"article_title\" parameter is required");
+            return BadRequest("\"articleTitle\" parameter is required");
 
         try
         {
-            var existedArticleId = (await _articleService.GetArticleAsync(articleTitle, cancellationToken)).Id;
-            
+            var existedArticleId = (await _articlesService.GetArticleAsync(articleTitle, cancellationToken)).Id;
+
             var (newArticleModel, error) = Article.Create(
                 existedArticleId,
                 newArticle.Title,
@@ -156,13 +152,8 @@ public class SiteController : ControllerBase
                 return BadRequest(error);
             }
 
-            var updatedArticleId = await _articleService
-                .UpdateArticleAsync(
-                    articleTitle,
-                    newArticleModel.Title,
-                    newArticleModel.PublishDate,
-                    newArticleModel.Paragraphs,
-                    cancellationToken);
+            var updatedArticleId = await _articlesService
+                .UpdateArticleAsync(articleTitle, newArticleModel, cancellationToken);
 
             return Ok(updatedArticleId);
         }
@@ -174,14 +165,14 @@ public class SiteController : ControllerBase
 
     // Deleting an article by title
     [HttpDelete("{articleTitle=}")]
-    public async Task<IActionResult> DeleteArticle(string? articleTitle, 
+    public async Task<IActionResult> DeleteArticle(string? articleTitle,
         CancellationToken cancellationToken)
     {
         if (string.IsNullOrEmpty(articleTitle))
-            return BadRequest("\"article_title\" parameter is required");
+            return BadRequest("\"articleTitle\" parameter is required");
         try
         {
-            var deletedArticleId = await _articleService
+            var deletedArticleId = await _articlesService
                 .DeleteArticleAsync(articleTitle, cancellationToken);
 
             return Ok(deletedArticleId);
@@ -190,12 +181,5 @@ public class SiteController : ControllerBase
         {
             return BadRequest(e.Message);
         }
-    }
-
-    // Getting filtered mushrooms (probably)
-    [HttpGet]
-    public IResult Mushrooms([FromQuery] MushroomsModel filterValues)
-    {
-        return Results.Json(MushroomsFilter.Filter(filterValues, _dbContext));
     }
 }

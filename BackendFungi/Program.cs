@@ -10,12 +10,15 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Our services for controllers
-builder.Services.AddTransient<IFilterArticleService, FilterArticleService>();
-builder.Services.AddTransient<IArticleService, ArticleService>();
+builder.Services.AddTransient<IFilterArticleService, FilterArticleService>(); // TODO Этот сервис надо будет убрать
+builder.Services.AddTransient<IArticlesService, ArticlesService>();
+builder.Services.AddTransient<IMushroomsService, MushroomsService>();
 
 // Our services for repositories
 builder.Services.AddTransient<IArticlesRepository, ArticlesRepository>();
 builder.Services.AddTransient<IParagraphsRepository, ParagraphsRepository>();
+builder.Services.AddTransient<IMushroomsRepository, MushroomsRepository>();
+builder.Services.AddTransient<IDoppelgangersRepository, DoppelgangersRepository>();
 
 
 // CORS settings

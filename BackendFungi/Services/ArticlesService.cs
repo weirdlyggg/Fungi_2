@@ -3,13 +3,13 @@ using BackendFungi.Models;
 
 namespace BackendFungi.Services;
 
-public class ArticleService : IArticleService
+public class ArticlesService : IArticlesService
 {
-    private readonly IArticlesRepository _articleRepository;
+    private readonly IArticlesRepository _articlesRepository;
 
-    public ArticleService(IArticlesRepository articleRepository)
+    public ArticlesService(IArticlesRepository articlesRepository)
     {
-        _articleRepository = articleRepository;
+        _articlesRepository = articlesRepository;
     }
 
     // Returns an article model based on the article title
@@ -17,9 +17,9 @@ public class ArticleService : IArticleService
     {
         try
         {
-            var articleId = await _articleRepository.GetArticleId(articleTitle);
+            var articleId = await _articlesRepository.GetArticleId(articleTitle);
 
-            var article = await _articleRepository.GetArticle(articleId);
+            var article = await _articlesRepository.GetArticle(articleId);
 
             return article;
         }
@@ -28,13 +28,13 @@ public class ArticleService : IArticleService
             throw new Exception($"Unable to get article \"{articleTitle}\": \"{e.Message}\"");
         }
     }
-
+    
     // Returns a list of all article models
     public async Task<List<Article>> GetAllArticlesAsync(CancellationToken ct)
     {
         try
         {
-            var articles = await _articleRepository.GetAllArticles();
+            var articles = await _articlesRepository.GetAllArticles();
 
             return articles;
         }
@@ -43,6 +43,8 @@ public class ArticleService : IArticleService
             throw new Exception($"Unable to get articles: \"{e.Message}\"");
         }
     }
+    
+    // TODO реализовать здесь метод сортировки статей
 
     // Creates an article and paragraphs for it in the database,
     // returns the id of the created article
@@ -50,7 +52,7 @@ public class ArticleService : IArticleService
     {
         try
         {
-            await _articleRepository.GetArticleId(article.Title);
+            await _articlesRepository.GetArticleId(article.Title);
             throw new Exception($"Article \"{article.Title}\" has already existed");
         }
         catch (Exception e)
@@ -62,7 +64,7 @@ public class ArticleService : IArticleService
 
             try
             {
-                var createdArticleId = await _articleRepository.CreateArticle(article);
+                var createdArticleId = await _articlesRepository.CreateArticle(article);
 
                 return createdArticleId;
             }
@@ -74,15 +76,14 @@ public class ArticleService : IArticleService
     }
 
     // Changes the article parameters to new ones, returns the id of the changed article
-    public async Task<Guid> UpdateArticleAsync(string articleTitle, string newArticleTitle, DateTime? newPublishDate,
-        List<Paragraph> newParagraphs, CancellationToken ct)
+    public async Task<Guid> UpdateArticleAsync(string articleTitle, Article newArticleModel, CancellationToken ct)
     {
         try
         {
-            var existedArticleId = await _articleRepository.GetArticleId(articleTitle);
+            var existedArticleId = await _articlesRepository.GetArticleId(articleTitle);
 
-            var updatedArticleId = await _articleRepository
-                .UpdateArticle(existedArticleId, newArticleTitle, newPublishDate, newParagraphs);
+            var updatedArticleId = await _articlesRepository
+                .UpdateArticle(existedArticleId, newArticleModel);
 
             return updatedArticleId;
         }
@@ -97,9 +98,9 @@ public class ArticleService : IArticleService
     {
         try
         {
-            var articleId = await _articleRepository.GetArticleId(articleTitle);
+            var articleId = await _articlesRepository.GetArticleId(articleTitle);
 
-            var deletedArticleId = await _articleRepository.DeleteArticle(articleId);
+            var deletedArticleId = await _articlesRepository.DeleteArticle(articleId);
 
             return deletedArticleId;
         }
