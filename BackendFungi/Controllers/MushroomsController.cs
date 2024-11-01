@@ -4,10 +4,6 @@ using BackendFungi.Database.Context;
 using BackendFungi.Models;
 using Microsoft.AspNetCore.Mvc;
 
-// TODO Убрать использование YuraFolder и интегрировать все оттуда в сервис грибов
-using BackendFungi.YuraFolder.Models;
-using BackendFungi.YuraFolder.Supports;
-
 namespace BackendFungi.Controllers;
 
 [ApiController]
@@ -16,16 +12,13 @@ public class MushroomsController : ControllerBase
 {
     // Database contexts
     // TODO Убрать использование DbContext из контроллера
-    private readonly FungiDbContext _dbContext;
 
     // Services
     private readonly IMushroomsService _mushroomsService;
 
     public MushroomsController(
-        FungiDbContext dbContext, // TODO см. туду на строке 18 этого файла
         IMushroomsService mushroomsService)
     {
-        _dbContext = dbContext; // TODO см. туду на строке 18 этого файла
         _mushroomsService = mushroomsService;
     }
 
@@ -116,13 +109,46 @@ public class MushroomsController : ControllerBase
         }
     }
 
-    // TODO Нужно исправить метод фильтрации грибов под единый сервис грибов
-    // Getting filtered mushrooms (probably)
+    // Getting filtered mushrooms
     [HttpGet]
-    public IResult GetFilteredMushrooms([FromQuery] MushroomsModel filterValues)
+    public async Task<IActionResult> GetFilteredMushrooms([FromQuery] GetFilterMushroomRequest filter, 
+        CancellationToken cancellationToken)
     {
-        // TODO см. туду на строке 18 этого файла
-        return Results.Json(MushroomsFilter.Filter(filterValues, _dbContext));
+        try
+        {
+            var filtered = await _mushroomsService.GetFilteredMushroomsAsync(filter, cancellationToken);
+
+            var response = new List<MushroomDtoWithDoppelgangersMap>();
+
+            foreach(var (mushroom, doppelgangersMap) in filtered)
+            {
+                var doppelgangers = mushroom.Doppelgangers
+                    .Select(d => new DoppelgangerDto(d.DoppelgangerName))
+                    .ToList();
+
+                var mushroomDto = new MushroomDtoWithDoppelgangersMap(
+                    mushroom.Name,
+                    mushroom.SynonymousName,
+                    mushroom.RedBook,
+                    mushroom.Eatable,
+                    mushroom.HasStem,
+                    mushroom.StemSizeFrom,
+                    mushroom.StemSizeTo,
+                    mushroom.StemType,
+                    mushroom.StemColor,
+                    mushroom.Description,
+                    doppelgangers,
+                    doppelgangersMap);
+
+                response.Add(mushroomDto);
+            }
+
+            return Ok(response);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
     }
 
     // Creating a new mushroom based on the received data

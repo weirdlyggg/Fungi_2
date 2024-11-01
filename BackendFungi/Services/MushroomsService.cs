@@ -1,4 +1,5 @@
 using BackendFungi.Abstractions;
+using BackendFungi.Contracts;
 using BackendFungi.Models;
 
 namespace BackendFungi.Services;
@@ -82,9 +83,104 @@ public class MushroomsService : IMushroomsService
             throw new Exception($"Unable to get mushrooms: \"{e.Message}\"");
         }
     }
-    
-    // TODO реализовать здесь метод сортировки грибов
-    
+
+    // Returns a list of mushrooms after filtering
+    public async Task<List<(Mushroom Mushroom, List<bool> DoppelgangersMap)>> 
+        GetFilteredMushroomsAsync(GetFilterMushroomRequest filterMushroomDto, CancellationToken ct)
+    {
+        var mushrooms = await _mushroomsRepository.GetAllMushrooms();
+
+        try
+        {
+            if(filterMushroomDto.PartOfName is not null)
+            {
+                mushrooms = mushrooms
+                    .Where(
+                    mushroom => mushroom.Name.Contains(filterMushroomDto.PartOfName) || 
+                    mushroom.SynonymousName is not null && mushroom.SynonymousName.Contains(filterMushroomDto.PartOfName)
+                    )
+                    .ToList();
+            }
+
+            if(filterMushroomDto.Redbook is not null)
+            {
+                mushrooms = mushrooms
+                    .Where(mushroom => mushroom.RedBook == filterMushroomDto.Redbook)
+                    .ToList();
+            }
+
+            if (filterMushroomDto.Eatable is not null)
+            {
+                mushrooms = mushrooms
+                    .Where(mushroom => mushroom.Eatable == filterMushroomDto.Eatable)
+                    .ToList();
+            }
+
+            if (filterMushroomDto.HasStem is not null)
+            {
+                mushrooms = mushrooms
+                    .Where(mushroom => mushroom.HasStem == filterMushroomDto.HasStem)
+                    .ToList();
+            }
+
+            if (filterMushroomDto.StemSizeFrom is not null)
+            {
+                mushrooms = mushrooms
+                    .Where(mushroom => mushroom.StemSizeFrom >= filterMushroomDto.StemSizeFrom)
+                    .ToList();
+            }
+
+            if (filterMushroomDto.StemSizeTo is not null)
+            {
+                mushrooms = mushrooms
+                    .Where(mushroom => mushroom.StemSizeTo <= filterMushroomDto.StemSizeTo)
+                    .ToList();
+            }
+
+            if (filterMushroomDto.StemType is not null)
+            {
+                mushrooms = mushrooms
+                    .Where(mushroom => mushroom.StemType == filterMushroomDto.StemType)
+                    .ToList();
+            }
+
+            if (filterMushroomDto.StemColor is not null)
+            {
+                mushrooms = mushrooms
+                    .Where(mushroom => mushroom.StemColor == filterMushroomDto.StemColor)
+                    .ToList();
+            }
+
+            var result = new List<(Mushroom, List<bool> DoppelgangersMap)>();
+            foreach (var mushroom in mushrooms)
+            {
+                var doppelgangersMap = new List<bool>();
+                foreach (var doppelganger in mushroom.Doppelgangers)
+                {
+                    try
+                    {
+                        await _mushroomsRepository.GetMushroomId(doppelganger.DoppelgangerName);
+
+                        doppelgangersMap.Add(true);
+                    }
+                    catch (Exception)
+                    {
+                        doppelgangersMap.Add(false);
+                    }
+                }
+
+                result.Add((mushroom, doppelgangersMap));
+            }
+
+            return result;
+        }
+
+        catch (Exception e)
+        {
+            throw new Exception($"Incorrect input data\nMessage: {e.Message}");
+        }
+    }
+
     // Creates a mushroom and doppelgangers for it in the database,
     // returns the id of the created mushroom
     public async Task<Guid> CreateMushroomAsync(Mushroom mushroom, CancellationToken ct)

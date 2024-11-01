@@ -1,0 +1,237 @@
+[
+  {
+    "ContainingType": "BackendFungi.Controllers.ArticlesController",
+    "Method": "CreateArticle",
+    "RelativePath": "CreateArticle",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "BackendFungi.Contracts.ArticleDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BackendFungi.Controllers.MushroomsController",
+    "Method": "CreateMushroom",
+    "RelativePath": "CreateMushroom",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "BackendFungi.Contracts.MushroomDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BackendFungi.Controllers.ArticlesController",
+    "Method": "DeleteArticle",
+    "RelativePath": "DeleteArticle/{articleTitle}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "articleTitle",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BackendFungi.Controllers.MushroomsController",
+    "Method": "DeleteMushroom",
+    "RelativePath": "DeleteMushroom/{mushroomName}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "mushroomName",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BackendFungi.Controllers.ArticlesController",
+    "Method": "GetAllArticles",
+    "RelativePath": "GetAllArticles",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BackendFungi.Controllers.MushroomsController",
+    "Method": "GetAllMushrooms",
+    "RelativePath": "GetAllMushrooms",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BackendFungi.Controllers.ArticlesController",
+    "Method": "GetArticle",
+    "RelativePath": "GetArticle/{articleTitle}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "articleTitle",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BackendFungi.Controllers.ArticlesController",
+    "Method": "GetFilteredArticles",
+    "RelativePath": "GetFilteredArticles",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Search",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "SortBy",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "SortOrder",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BackendFungi.Controllers.MushroomsController",
+    "Method": "GetFilteredMushrooms",
+    "RelativePath": "GetFilteredMushrooms",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "PartOfName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Redbook",
+        "Type": "System.Nullable\u00601[[System.Boolean, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "Eatable",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "HasStem",
+        "Type": "System.Nullable\u00601[[System.Boolean, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "StemSizeFrom",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "StemSizeTo",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "StemType",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "StemColor",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BackendFungi.Controllers.MushroomsController",
+    "Method": "GetMushroom",
+    "RelativePath": "GetMushroom/{mushroomName}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "mushroomName",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BackendFungi.Controllers.ArticlesController",
+    "Method": "UpdateArticle",
+    "RelativePath": "UpdateArticle/{articleTitle}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "articleTitle",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "newArticle",
+        "Type": "BackendFungi.Contracts.ArticleDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BackendFungi.Controllers.MushroomsController",
+    "Method": "UpdateMushroom",
+    "RelativePath": "UpdateMushroom/{mushroomName}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "mushroomName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "newMushroom",
+        "Type": "BackendFungi.Contracts.MushroomDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  }
+]
