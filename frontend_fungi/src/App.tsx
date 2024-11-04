@@ -1,11 +1,28 @@
-function App() {
+import React, {Component} from "react";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import "./index.css";
+import {MainPage} from "./pages/MainPage.tsx";
+import "./components/Header/header.tsx";
+import {Header} from "./components/Header/header.tsx";
+import { Footer } from "./components/Footer/footer.tsx";
+//import {Footer} from "./components/Footer/footer.tsx";
+
+export function App() {
 
   return (
-    <>
-      <div>
-          <h1>Hello, World!</h1>
-      </div>
-    </>
+    <div className='wrapper'>
+      <BrowserRouter>
+      <Header />
+        <Routes>
+          <Route path="/" element={<Navigate to="/mainpage"/>}/>
+          <Route path="/mainpage" element={
+            <MainPage />
+          } />
+          <Route path="*" element={<Navigate to="/mainpage"/>}/>
+        </Routes>
+        <Footer />
+      </BrowserRouter>
+    </div>
   )
 }
 
