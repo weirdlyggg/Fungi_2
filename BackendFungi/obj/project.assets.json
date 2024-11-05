@@ -1484,19 +1484,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\yuram\\.nuget\\packages\\": {}
+    "C:\\Users\\sgelo\\.nuget\\packages\\": {},
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\yuram\\OneDrive\\Desktop\\Грибы\\Fungi_2\\BackendFungi\\BackendFungi.csproj",
+      "projectUniqueName": "C:\\programming\\polytech\\Fungi_2\\BackendFungi\\BackendFungi.csproj",
       "projectName": "BackendFungi",
-      "projectPath": "C:\\Users\\yuram\\OneDrive\\Desktop\\Грибы\\Fungi_2\\BackendFungi\\BackendFungi.csproj",
-      "packagesPath": "C:\\Users\\yuram\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\yuram\\OneDrive\\Desktop\\Грибы\\Fungi_2\\BackendFungi\\obj\\",
+      "projectPath": "C:\\programming\\polytech\\Fungi_2\\BackendFungi\\BackendFungi.csproj",
+      "packagesPath": "C:\\Users\\sgelo\\.nuget\\packages\\",
+      "outputPath": "C:\\programming\\polytech\\Fungi_2\\BackendFungi\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+      ],
       "configFilePaths": [
-        "C:\\Users\\yuram\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\sgelo\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -1504,7 +1508,6 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -1558,6 +1561,24 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
+        "downloadDependencies": [
+          {
+            "name": "Microsoft.AspNetCore.App.Ref",
+            "version": "[7.0.20, 7.0.20]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Host.win-x64",
+            "version": "[7.0.20, 7.0.20]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Ref",
+            "version": "[7.0.20, 7.0.20]"
+          },
+          {
+            "name": "Microsoft.WindowsDesktop.App.Ref",
+            "version": "[7.0.20, 7.0.20]"
+          }
+        ],
         "frameworkReferences": {
           "Microsoft.AspNetCore.App": {
             "privateAssets": "none"
@@ -1566,7 +1587,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.403\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.206\\RuntimeIdentifierGraph.json"
       }
     }
   }

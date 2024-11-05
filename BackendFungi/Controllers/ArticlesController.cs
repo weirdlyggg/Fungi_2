@@ -10,16 +10,10 @@ namespace BackendFungi.Controllers;
 public class ArticlesController : ControllerBase
 {
     // Services
-    private readonly IFilterArticleService
-        _filterArticleService; // TODO убрать сервис фильтрации, интегрировав его в сервис статей
-
     private readonly IArticlesService _articlesService;
 
-    public ArticlesController(
-        IFilterArticleService filterArticleService, // TODO см. туду на строке 14 этого файла
-        IArticlesService articlesService)
+    public ArticlesController(IArticlesService articlesService)
     {
-        _filterArticleService = filterArticleService; // TODO см. туду на строке 14 этого файла
         _articlesService = articlesService;
     }
 
@@ -90,8 +84,8 @@ public class ArticlesController : ControllerBase
     {
         try
         {
-            var filterArticleDtos = await _filterArticleService
-                .GetFilterArticlesAsync(request, cancellationToken);
+            var filterArticleDtos = await _articlesService
+                .GetFilteredArticlesAsync(request, cancellationToken);
             return Ok(new GetFilterArticleResponse(filterArticleDtos));
         }
         catch (Exception e)

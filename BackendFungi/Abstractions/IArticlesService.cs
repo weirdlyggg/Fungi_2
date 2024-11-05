@@ -1,3 +1,4 @@
+using BackendFungi.Contracts;
 using BackendFungi.Models;
 
 namespace BackendFungi.Abstractions;
@@ -9,7 +10,8 @@ public interface IArticlesService
     
     // TODO Нужно как-то интегрировать фильтрацию статей в этот интерфейс и сервис
     // Task<List<Article>> GetFilteredArticlesAsync(Какие-то параметры, CancellationToken ct);
-    
+    Task<List<FilterArticleDto>> GetFilteredArticlesAsync(GetFilterArticleRequest request, CancellationToken ct);
+
     Task<Guid> CreateArticleAsync(Article article, CancellationToken ct);
     Task<Guid> UpdateArticleAsync(string articleTitle, Article newArticleModel, CancellationToken ct);
     Task<Guid> DeleteArticleAsync(string articleTitle, CancellationToken ct);
