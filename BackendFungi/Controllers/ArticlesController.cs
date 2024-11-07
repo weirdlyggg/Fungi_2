@@ -79,20 +79,22 @@ public class ArticlesController : ControllerBase
 
     // Getting filtered articles
     [HttpGet]
-    public async Task<IActionResult> GetFilteredArticles([FromQuery] GetFilterArticleRequest request,
-        CancellationToken cancellationToken) // TODO Исправить метод фильтрации статей под единый сервис статей 
+    public async Task<IActionResult> GetFilteredArticles([FromQuery] GetFilterArticleRequest request, 
+        CancellationToken cancellationToken)
     {
         try
         {
-            var filterArticleDtos = await _articlesService
+            var articleDtos = await _articlesService
                 .GetFilteredArticlesAsync(request, cancellationToken);
-            return Ok(new GetFilterArticleResponse(filterArticleDtos));
+
+            return Ok(articleDtos); // Возвращаем List<ArticleDto> напрямую
         }
         catch (Exception e)
         {
             return StatusCode(500, $"An error occurred while retrieving data. \"{e.Message}\"");
         }
     }
+
 
     // Creating a new article based on the received data
     [HttpPost]

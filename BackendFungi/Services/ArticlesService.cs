@@ -43,16 +43,13 @@ public class ArticlesService : IArticlesService {
         }
     }
 
-    public async Task<List<FilterArticleDto>> GetFilteredArticlesAsync(GetFilterArticleRequest request,
+    public async Task<List<ArticleDto>> GetFilteredArticlesAsync(GetFilterArticleRequest request,
         CancellationToken ct) {
         var filterArticleQuery = _context.Articles
+            .Include(a => a.Paragraphs)
             .Where(a => string.IsNullOrEmpty(request.Search) || a.Title.ToLower().Contains(request.Search.ToLower()));
 
         filterArticleQuery = request.SortBy?.ToLower() switch {
-            "id" => request.SortOrder == "desc"
-                ? filterArticleQuery.OrderByDescending(article => article.Id)
-                : filterArticleQuery.OrderBy(article => article.Id),
-
             "title" => request.SortOrder == "desc"
                 ? filterArticleQuery.OrderByDescending(article => article.Title)
                 : filterArticleQuery.OrderBy(article => article.Title),
@@ -63,7 +60,11 @@ public class ArticlesService : IArticlesService {
         };
 
         return await filterArticleQuery
-            .Select(a => new FilterArticleDto(a.Id, a.Title, a.PublishDate))
+            .Select(a => new ArticleDto(
+                a.Title,
+                a.PublishDate,
+                a.Paragraphs.Select(p => new ParagraphDto(p.ParagraphText)).ToList()
+            ))
             .ToListAsync(ct);
     }
 
