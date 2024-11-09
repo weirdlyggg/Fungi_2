@@ -10,7 +10,6 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Our services for controllers
-builder.Services.AddTransient<IFilterArticleService, FilterArticleService>(); // TODO Этот сервис надо будет убрать
 builder.Services.AddTransient<IArticlesService, ArticlesService>();
 builder.Services.AddTransient<IMushroomsService, MushroomsService>();
 
