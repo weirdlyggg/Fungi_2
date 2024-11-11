@@ -1,0 +1,83 @@
+/* Основные стили для страницы "О нас" */
+.about {
+    font-family: Arial, sans-serif;
+    color: #333;
+    padding: 20px;
+  }
+  
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #e0e0e0;
+  }
+  
+  .logo {
+    height: 40px;
+  }
+  
+  .nav-links {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+  }
+  
+  .nav-links li {
+    cursor: pointer;
+    font-weight: bold;
+  }
+  
+  .intro {
+    margin-top: 20px;
+  }
+  
+  .intro h1 {
+    font-size: 24px;
+    color: #4a4a4a;
+  }
+  
+  .intro p {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  
+  .features {
+    margin-top: 40px;
+    text-align: center;
+  }
+  
+  .features h2 {
+    font-size: 20px;
+    color: #333;
+  }
+  
+  .feature-cards {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-top: 20px;
+  }
+  
+  .card {
+    text-align: center;
+    max-width: 120px;
+  }
+  
+  .card img {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .card p {
+    font-size: 14px;
+    margin-top: 10px;
+  }
+  
+  .join {
+    margin-top: 50px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 18px;
+  }
+  
