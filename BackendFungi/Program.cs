@@ -20,7 +20,6 @@ builder.Services.AddTransient<IParagraphsRepository, ParagraphsRepository>();
 builder.Services.AddTransient<IMushroomsRepository, MushroomsRepository>();
 builder.Services.AddTransient<IDoppelgangersRepository, DoppelgangersRepository>();
 
-
 // CORS settings
 builder.Services.AddCors(options => options.AddPolicy
     (

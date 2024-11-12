@@ -29,6 +29,7 @@ public class MushroomsService : IMushroomsService
             {
                 try
                 {
+                    // TODO оптимизировать карту доппельгангеров
                     await _mushroomsRepository.GetMushroomId(doppelganger.DoppelgangerName);
 
                     doppelgangersMap.Add(true);
@@ -63,6 +64,7 @@ public class MushroomsService : IMushroomsService
                 {
                     try
                     {
+                        // TODO оптимизировать карту доппельгангеров
                         await _mushroomsRepository.GetMushroomId(doppelganger.DoppelgangerName);
 
                         doppelgangersMap.Add(true);
@@ -84,7 +86,7 @@ public class MushroomsService : IMushroomsService
         }
     }
 
-    // Returns a list of mushrooms after filtering
+    // Returns a list of mushrooms and doppelgangers map for them after filtering
     public async Task<List<(Mushroom Mushroom, List<bool> DoppelgangersMap)>> 
         GetFilteredMushroomsAsync(GetFilterMushroomRequest filterMushroomDto, CancellationToken ct)
     {
@@ -102,10 +104,10 @@ public class MushroomsService : IMushroomsService
                     .ToList();
             }
 
-            if(filterMushroomDto.Redbook is not null)
+            if(filterMushroomDto.RedBook is not null)
             {
                 mushrooms = mushrooms
-                    .Where(mushroom => mushroom.RedBook == filterMushroomDto.Redbook)
+                    .Where(mushroom => mushroom.RedBook == filterMushroomDto.RedBook)
                     .ToList();
             }
 
@@ -159,6 +161,7 @@ public class MushroomsService : IMushroomsService
                 {
                     try
                     {
+                        // TODO оптимизировать карту доппельгангеров
                         await _mushroomsRepository.GetMushroomId(doppelganger.DoppelgangerName);
 
                         doppelgangersMap.Add(true);

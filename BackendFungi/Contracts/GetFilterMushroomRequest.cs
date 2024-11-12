@@ -2,7 +2,7 @@
 
 public record GetFilterMushroomRequest(
     string? PartOfName,
-    bool? Redbook,
+    bool? RedBook,
     string? Eatable,
     bool? HasStem,
     int? StemSizeFrom,
